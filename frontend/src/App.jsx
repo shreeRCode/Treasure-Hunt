@@ -6,7 +6,7 @@ function App() {
   const [showMap, setShowMap] = useState(false);
 
   return showMap ? (
-    <MapPage />
+    <MapPage onBack={() => setShowMap(false)} />
   ) : (
     <LandingPage onStart={() => setShowMap(true)} />
   );
