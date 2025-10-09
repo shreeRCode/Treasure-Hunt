@@ -1,9 +1,12 @@
 // src/pages/LandingPage.jsx
 import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom"; // ✅ import navigate
 import AOS from "aos";
 import "aos/dist/aos.css";
 
-const LandingPage = ({ onStart }) => {
+const LandingPage = () => {
+  const navigate = useNavigate();
+
   useEffect(() => {
     AOS.init({ duration: 1200, once: true });
   }, []);
@@ -16,20 +19,24 @@ const LandingPage = ({ onStart }) => {
           🏴‍☠️ Treasure Hunt Adventure
         </h1>
         <p className="text-lg md:text-xl text-yellow-800 max-w-2xl mx-auto">
-          Embark on a thrilling quest to uncover hidden treasures, overcome challenges, and become the ultimate pirate champion!
+          Embark on a thrilling quest to uncover hidden treasures, overcome
+          challenges, and become the ultimate pirate champion!
         </p>
       </header>
 
       {/* Call-to-Action Buttons */}
       <div className="flex flex-col md:flex-row gap-6 mt-12" data-aos="fade-up">
         <button
-          onClick={onStart}
+          onClick={() => navigate("/signup")} // ✅ goes to signup
           className="bg-yellow-700 hover:bg-yellow-800 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition transform hover:-translate-y-1"
         >
           Start the Hunt
         </button>
-        <button className="bg-yellow-200 hover:bg-yellow-300 text-yellow-900 font-bold py-3 px-8 rounded-lg shadow-lg transition transform hover:-translate-y-1">
-          Learn How to Play
+        <button
+          onClick={() => navigate("/login")} // ✅ direct login if they have account
+          className="bg-yellow-200 hover:bg-yellow-300 text-yellow-900 font-bold py-3 px-8 rounded-lg shadow-lg transition transform hover:-translate-y-1"
+        >
+          Already have an account?
         </button>
       </div>
 
@@ -56,10 +63,14 @@ const LandingPage = ({ onStart }) => {
       </section>
 
       {/* About Section */}
-      <section className="mt-20 max-w-3xl text-center text-yellow-900 px-4" data-aos="fade-up">
+      <section
+        className="mt-20 max-w-3xl text-center text-yellow-900 px-4"
+        data-aos="fade-up"
+      >
         <h2 className="text-3xl font-bold mb-4">Why Play?</h2>
         <p className="text-lg md:text-xl">
-          Solve riddles, follow the treasure map, and collect rewards along the way. Test your wit, strategy, and courage—every adventure is unique!
+          Solve riddles, follow the treasure map, and collect rewards along the
+          way. Test your wit, strategy, and courage—every adventure is unique!
         </p>
       </section>
 

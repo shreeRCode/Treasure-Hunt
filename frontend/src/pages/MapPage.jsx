@@ -1,6 +1,6 @@
 // src/pages/MapPage.jsx
 import React, { useEffect } from "react";
-import { motion } from "framer-motion";
+// import { motion } from "framer-motion";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import {
@@ -29,15 +29,42 @@ const MapPage = ({ onBack }) => {
   ];
 
   const decorations = [
-    { icon: <FaTree className="text-green-700 text-4xl" />, style: { top: "10%", left: "5%" } },
-    { icon: <FaTree className="text-green-800 text-5xl" />, style: { top: "70%", right: "5%" } },
-    { icon: <FaShip className="text-blue-900 text-5xl" />, style: { bottom: "10%", right: "-2rem" } },
-    { icon: <FaShip className="text-blue-800 text-6xl" />, style: { top: "10%", left: "-2rem" } },
-    { icon: <FaCrow className="text-black text-3xl" />, style: { top: "5%", left: "50%" } },
-    { icon: <FaCrow className="text-gray-800 text-2xl" />, style: { top: "20%", right: "20%" } },
-    { icon: <FaParachuteBox className="text-blue-500 text-3xl" />, style: { top: "25%", right: "15%" } },
-    { icon: <FaFeatherAlt className="text-blue-400 text-2xl rotate-12" />, style: { bottom: "25%", left: "30%" } },
-    { icon: <FaMapMarkedAlt className="text-purple-700 text-3xl" />, style: { bottom: "10%", left: "50%" } },
+    {
+      icon: <FaTree className="text-green-700 text-4xl" />,
+      style: { top: "10%", left: "5%" },
+    },
+    {
+      icon: <FaTree className="text-green-800 text-5xl" />,
+      style: { top: "70%", right: "5%" },
+    },
+    {
+      icon: <FaShip className="text-blue-900 text-5xl" />,
+      style: { bottom: "10%", right: "-2rem" },
+    },
+    {
+      icon: <FaShip className="text-blue-800 text-6xl" />,
+      style: { top: "10%", left: "-2rem" },
+    },
+    {
+      icon: <FaCrow className="text-black text-3xl" />,
+      style: { top: "5%", left: "50%" },
+    },
+    {
+      icon: <FaCrow className="text-gray-800 text-2xl" />,
+      style: { top: "20%", right: "20%" },
+    },
+    {
+      icon: <FaParachuteBox className="text-blue-500 text-3xl" />,
+      style: { top: "25%", right: "15%" },
+    },
+    {
+      icon: <FaFeatherAlt className="text-blue-400 text-2xl rotate-12" />,
+      style: { bottom: "25%", left: "30%" },
+    },
+    {
+      icon: <FaMapMarkedAlt className="text-purple-700 text-3xl" />,
+      style: { bottom: "10%", left: "50%" },
+    },
   ];
 
   const pathD = "M 80 80 C 150 150, 250 100, 280 220 S 220 300, 120 400";
@@ -80,13 +107,26 @@ const MapPage = ({ onBack }) => {
         <div className="absolute inset-y-0 right-0 w-20 bg-blue-500 opacity-70 rounded-l-full" />
 
         {/* Treasure path */}
-        <svg className="absolute inset-0 w-full h-full pointer-events-none" aria-hidden>
-          <path d={pathD} stroke="#6b3e0a" strokeWidth={3} strokeDasharray="8 8" fill="none" />
+        <svg
+          className="absolute inset-0 w-full h-full pointer-events-none"
+          aria-hidden
+        >
+          <path
+            d={pathD}
+            stroke="#6b3e0a"
+            strokeWidth={3}
+            strokeDasharray="8 8"
+            fill="none"
+          />
         </svg>
 
         {/* Levels */}
         {levels.map((lvl) => (
-          <div key={lvl.id} className="absolute" style={{ left: lvl.cx - 20, top: lvl.cy - 20 }}>
+          <div
+            key={lvl.id}
+            className="absolute"
+            style={{ left: lvl.cx - 20, top: lvl.cy - 20 }}
+          >
             <motion.div
               whileHover={{ scale: 1.2, rotate: 5 }}
               className="flex flex-col items-center select-none cursor-pointer"
@@ -95,7 +135,10 @@ const MapPage = ({ onBack }) => {
               tabIndex={0}
             >
               <div className="relative">
-                <FaSkullCrossbones className="text-red-600 text-5xl drop-shadow-md" aria-hidden />
+                <FaSkullCrossbones
+                  className="text-red-600 text-5xl drop-shadow-md"
+                  aria-hidden
+                />
                 <FaHatCowboy className="absolute -top-6 left-1 text-black text-2xl rotate-6" />
               </div>
               <span className="font-bold text-lg mt-1 bg-white px-2 rounded-full shadow">
