@@ -1,6 +1,6 @@
 // src/pages/LandingPage.jsx
 import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom"; // ✅ import navigate
+import { useNavigate } from "react-router-dom";
 import AOS from "aos";
 import "aos/dist/aos.css";
 
@@ -24,19 +24,13 @@ const LandingPage = () => {
         </p>
       </header>
 
-      {/* Call-to-Action Buttons */}
-      <div className="flex flex-col md:flex-row gap-6 mt-12" data-aos="fade-up">
+      {/* Begin Hunt Button */}
+      <div className="flex flex-col gap-6 mt-12" data-aos="fade-up">
         <button
-          onClick={() => navigate("/signup")} // ✅ goes to signup
+          onClick={() => navigate("/login")} // always go to login
           className="bg-yellow-700 hover:bg-yellow-800 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition transform hover:-translate-y-1"
         >
-          Start the Hunt
-        </button>
-        <button
-          onClick={() => navigate("/login")} // ✅ direct login if they have account
-          className="bg-yellow-200 hover:bg-yellow-300 text-yellow-900 font-bold py-3 px-8 rounded-lg shadow-lg transition transform hover:-translate-y-1"
-        >
-          Already have an account?
+          Begin the Hunt
         </button>
       </div>
 
