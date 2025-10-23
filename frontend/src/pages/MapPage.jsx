@@ -1,6 +1,6 @@
 // src/pages/MapPage.jsx
 import React, { useEffect } from "react";
-// import { motion } from "framer-motion";
+import { motion } from "framer-motion";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import {
