@@ -1,4 +1,3 @@
-// src/pages/MapPage.jsx
 import React, { useEffect } from "react";
 import { motion } from "framer-motion";
 import AOS from "aos";
@@ -14,11 +13,14 @@ import {
   FaCrow,
   FaHatCowboy,
 } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const MapPage = ({ onBack }) => {
   useEffect(() => {
     AOS.init({ duration: 1200, once: true });
   }, []);
+
+  const navigate = useNavigate();
 
   const levels = [
     { id: 1, cx: 80, cy: 80 },
@@ -133,6 +135,7 @@ const MapPage = ({ onBack }) => {
               role="button"
               aria-label={`Level ${lvl.id}`}
               tabIndex={0}
+              onClick={() => navigate(`/quiz/${lvl.id}`)} // <-- Navigate to quiz page
             >
               <div className="relative">
                 <FaSkullCrossbones

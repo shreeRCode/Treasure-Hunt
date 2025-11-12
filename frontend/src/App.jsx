@@ -1,32 +1,22 @@
 import React, { useContext } from "react";
-import { Routes, Route, Navigate } from "react-router-dom"; // Fixed: Added missing imports
-import { ToastContainer } from "react-toastify"; // Fixed: Added import
-import "react-toastify/dist/ReactToastify.css"; // Required for toasts styling
+import { Routes, Route, Navigate } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-// Page components (Fixed: Added all missing imports - adjust paths if your folder structure differs)
+// Import pages
 import LandingPage from "./pages/LandingPage";
 import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
 import MapPage from "./pages/MapPage";
+import ProfilePage from "./pages/ProfilePage";
+import QuizPage from "./pages/QuizPage";
+import TreasurePage from "./pages/TreasurePage";
 
-// Stub ProfilePage (Fixed: Added missing /profile route)
-const ProfilePage = () => {
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-blue-200 to-purple-400 p-6">
-      <div className="text-center text-white">
-        <h1 className="text-4xl font-bold mb-4">Profile</h1>
-        <p>
-          Coming soon! Your pirate profile will show progress, treasures, and
-          more.
-        </p>
-      </div>
-    </div>
-  );
-};
 
-import { AppContext } from "./context/AppContext"; // Fixed: Path consistency
+// Context
+import { AppContext } from "./context/AppContext";
 
-// Fixed: ProtectedRoute wrapper for dynamic auth checks
+// Protected route wrapper
 const ProtectedRoute = ({ children }) => {
   const { isLoggedin, isLoading } = useContext(AppContext);
 
@@ -44,6 +34,7 @@ const ProtectedRoute = ({ children }) => {
 const App = () => {
   return (
     <>
+      {/* Toast Notifications */}
       <ToastContainer
         position="top-right"
         autoClose={3000}
@@ -56,11 +47,14 @@ const App = () => {
         pauseOnHover
         theme="light"
       />
+
+      {/* App Routes */}
       <Routes>
-        <Route path="/" element={<LandingPage />} />{" "}
-        {/* Public: Always renders */}
-        <Route path="/login" element={<LoginPage />} /> {/* Public */}
-        {/* Fixed: Wrapped in ProtectedRoute for dynamic checks */}
+        {/* Public Routes */}
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/login" element={<LoginPage />} />
+
+        {/* Protected Routes */}
         <Route
           path="/home"
           element={
@@ -69,6 +63,7 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/map"
           element={
@@ -77,6 +72,7 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/profile"
           element={
@@ -85,7 +81,26 @@ const App = () => {
             </ProtectedRoute>
           }
         />
-        {/* Fixed: Added 404 fallback */}
+
+        <Route
+          path="/quiz/:level"
+          element={
+            <ProtectedRoute>
+              <QuizPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/treasure"
+          element={
+            <ProtectedRoute>
+              <TreasurePage />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Fallback */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>
