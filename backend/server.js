@@ -25,7 +25,6 @@ app.use(
 );
 
 // Fix preflight CORS requests
-app.options("*", cors());
 
 app.use(express.json());
 app.use(cookieParser());
