@@ -7,7 +7,12 @@ export const getUserData = async (req, res) => {
 
     return res.json({
       success: true,
-      userData: { name: user.name, email: user.email },
+      userData: {
+        name: user.name,
+        email: user.email,
+        currentLevel: user.currentLevel,
+        answeredQuestions: user.answeredQuestions,
+      },
     });
   } catch (error) {
     return res.json({ success: false, message: error.message });

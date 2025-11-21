@@ -30,4 +30,7 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.model("User", userSchema);
+// Use existing model if already compiled, else create new model
+const User = mongoose.models.User || mongoose.model("User", userSchema);
+
+export default User;
