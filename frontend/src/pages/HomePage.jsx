@@ -45,17 +45,11 @@ const HomePage = () => {
         hidden treasures across the map.
       </p>
 
-      {/* Game buttons */}
-      <div className="flex flex-col md:flex-row gap-6 justify-center items-center">
-        <button
-          className="bg-yellow-600 text-red-900 font-bold px-8 py-4 rounded-xl shadow-xl hover:bg-yellow-700 hover:scale-105 transform transition"
-          onClick={() => navigate("/map")}
-        >
-          Resume Game
-        </button>
+      {/* Game Button — New Adventure Only */}
+      <div className="flex flex-col gap-6 justify-center items-center">
         <button
           className="bg-orange-500 text-red-900 font-bold px-8 py-4 rounded-xl shadow-xl hover:bg-orange-600 hover:scale-105 transform transition"
-          onClick={() => navigate("/map")}
+          onClick={() => navigate("/quiz/1")} // 🚀 DIRECT TO QUIZ PAGE
         >
           New Adventure
         </button>

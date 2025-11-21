@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { motion } from "framer-motion";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import {
@@ -14,13 +13,14 @@ import {
   FaHatCowboy,
 } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { motion as Motion } from "framer-motion"; // Renamed import
 
-const MapPage = ({ onBack }) => {
+const MapPage = () => {
+  const navigate = useNavigate();
+
   useEffect(() => {
     AOS.init({ duration: 1200, once: true });
   }, []);
-
-  const navigate = useNavigate();
 
   const levels = [
     { id: 1, cx: 80, cy: 80 },
@@ -73,13 +73,14 @@ const MapPage = ({ onBack }) => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-blue-400 via-yellow-200 to-blue-500 p-6 relative overflow-hidden">
-      {/* Animated waves */}
-      <motion.div
+      {/* Animated Waves */}
+      <Motion.div
         className="absolute top-0 left-0 w-full h-20 bg-blue-300 opacity-60"
         animate={{ x: [0, 30, -30, 0] }}
         transition={{ repeat: Infinity, duration: 6 }}
       />
-      <motion.div
+
+      <Motion.div
         className="absolute bottom-0 left-0 w-full h-20 bg-blue-400 opacity-70"
         animate={{ x: [0, -30, 30, 0] }}
         transition={{ repeat: Infinity, duration: 8 }}
@@ -95,8 +96,8 @@ const MapPage = ({ onBack }) => {
 
       {/* Back Button */}
       <button
-        onClick={onBack}
-        className="mb-6 bg-yellow-700 hover:bg-yellow-800 text-white font-bold py-2 px-6 rounded-lg shadow-lg transition transform hover:-translate-y-1 z-10"
+        onClick={() => navigate("/")}
+        className="mb-6 bg-yellow-700 hover:bg-yellow-800 text-white font-bold py-2 px-6 rounded-lg shadow-lg transition hover:-translate-y-1 z-10"
         data-aos="fade-up"
       >
         ⬅ Back to Landing Page
@@ -104,15 +105,12 @@ const MapPage = ({ onBack }) => {
 
       {/* Map Container */}
       <div className="relative w-full max-w-2xl h-[500px] bg-yellow-200 border-8 border-yellow-800 rounded-2xl shadow-2xl p-4 overflow-hidden z-10">
-        {/* Island water edges */}
+        {/* Water edges */}
         <div className="absolute inset-y-0 left-0 w-20 bg-blue-500 opacity-70 rounded-r-full" />
         <div className="absolute inset-y-0 right-0 w-20 bg-blue-500 opacity-70 rounded-l-full" />
 
-        {/* Treasure path */}
-        <svg
-          className="absolute inset-0 w-full h-full pointer-events-none"
-          aria-hidden
-        >
+        {/* Path */}
+        <svg className="absolute inset-0 w-full h-full pointer-events-none">
           <path
             d={pathD}
             stroke="#6b3e0a"
@@ -129,25 +127,19 @@ const MapPage = ({ onBack }) => {
             className="absolute"
             style={{ left: lvl.cx - 20, top: lvl.cy - 20 }}
           >
-            <motion.div
+            <Motion.div
               whileHover={{ scale: 1.2, rotate: 5 }}
-              className="flex flex-col items-center select-none cursor-pointer"
-              role="button"
-              aria-label={`Level ${lvl.id}`}
-              tabIndex={0}
-              onClick={() => navigate(`/quiz/${lvl.id}`)} // <-- Navigate to quiz page
+              className="flex flex-col items-center cursor-pointer select-none"
+              onClick={() => navigate(`/quiz/${lvl.id}`)}
             >
               <div className="relative">
-                <FaSkullCrossbones
-                  className="text-red-600 text-5xl drop-shadow-md"
-                  aria-hidden
-                />
+                <FaSkullCrossbones className="text-red-600 text-5xl drop-shadow-md" />
                 <FaHatCowboy className="absolute -top-6 left-1 text-black text-2xl rotate-6" />
               </div>
               <span className="font-bold text-lg mt-1 bg-white px-2 rounded-full shadow">
                 {lvl.id}
               </span>
-            </motion.div>
+            </Motion.div>
           </div>
         ))}
 
@@ -158,21 +150,14 @@ const MapPage = ({ onBack }) => {
           </div>
         ))}
 
-        {/* Treasure chest */}
-        <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2">
-          <motion.button
-            whileHover={{ scale: 1.3, rotate: 8 }}
-            className="flex flex-col items-center focus:outline-none"
-            aria-label="Treasure chest"
-          >
-            <FaBoxOpen
-              className="text-yellow-700 text-6xl drop-shadow-lg animate-bounce"
-              aria-hidden
-            />
+        {/* Treasure */}
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2">
+          <Motion.button whileHover={{ scale: 1.3, rotate: 8 }}>
+            <FaBoxOpen className="text-yellow-700 text-6xl drop-shadow-lg animate-bounce" />
             <span className="font-bold text-lg mt-1 bg-yellow-100 px-3 py-1 rounded-full shadow-md">
               Treasure
             </span>
-          </motion.button>
+          </Motion.button>
         </div>
       </div>
     </div>

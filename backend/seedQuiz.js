@@ -34,24 +34,30 @@ const quizData = [
     question: "Which is the largest ocean?",
     options: ["Indian", "Arctic", "Pacific", "Atlantic"],
     correctAnswer: "Pacific",
-  }
+  },
 ];
 
 async function seed() {
   try {
-    await mongoose.connect(process.env.MONGODB_URI);
-    console.log("Connected to DB");
+    console.log("Connecting to DB...");
+    await mongoose.connect(process.env.MONGODB_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
 
+    console.log("Removing old quiz...");
     await Quiz.deleteMany();
-    console.log("Old questions removed");
 
+    console.log("Inserting new quiz data...");
     await Quiz.insertMany(quizData);
-    console.log("New quiz inserted!");
 
-    process.exit();
+    console.log("Quiz seeded successfully!");
+    process.exit(0);
   } catch (err) {
-    console.error(err);
+    console.error("SEEDING ERROR:", err);
     process.exit(1);
+  } finally {
+    mongoose.connection.close();
   }
 }
 

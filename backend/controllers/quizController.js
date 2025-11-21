@@ -1,96 +1,116 @@
-// --- CRITICAL FIX: The path must be '../models/...' to go up one directory ---
-import Quiz from "../models/quizModel.js"; 
-import User from "../models/userModel.js"; 
+import Quiz from "../models/quizModel.js";
+import User from "../models/userModel.js";
 
-// --- The function to fetch quiz questions from the database ---
+// ====================== GET QUIZ ======================
 export const getQuiz = async (req, res) => {
-  // 1. Get the level number from the URL parameter and parse it.
-  const level = parseInt(req.params.level);
+  const level = Number(req.params.level);
 
-  if (isNaN(level) || level <= 0) {
-    return res.status(400).json({ success: false, message: "Invalid level ID provided." });
+  if (!level || level <= 0) {
+    return res.status(400).json({
+      success: false,
+      message: "Invalid level provided.",
+    });
   }
 
   try {
-    // 2. Query the database using the Mongoose model
-    const quizzes = await Quiz.find({ level: level });
-    
-    // 3. Handle case where no questions are found for that level
-    if (quizzes.length === 0) {
-      // Returning 200/false to allow front-end to show the 'No questions' message without an error crash.
+    const quizzes = await Quiz.find({ level });
+
+    if (!quizzes || quizzes.length === 0) {
       return res.status(200).json({
-        success: false, 
+        success: false,
         message: `No quiz questions found for Level ${level}.`,
-        quizData: []
+        quizData: [],
       });
     }
 
-    // 4. Success: Send the fetched quiz data back to the client
     return res.status(200).json({
       success: true,
-      quizData: quizzes, // This uses the correct key expected by QuizPage.jsx
+      quizData: quizzes,
     });
-    
   } catch (error) {
-    // 5. Catch actual database connection or query errors
-    console.error(`CRITICAL ERROR fetching quiz for Level ${level}:`, error.message);
-    return res.status(500).json({ success: false, message: "Server error while fetching quiz." }); 
+    console.error("Error fetching quiz:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Server error while fetching quiz.",
+    });
   }
 };
 
-// --- Function to submit quiz answers (uses database data for scoring) ---
+// ====================== SUBMIT QUIZ ======================
 export const submitQuiz = async (req, res) => {
-  const level = parseInt(req.params.level);
-  const { answers } = req.body; 
-  const userId = req.user.userId;
+  const level = Number(req.params.level);
+  const { answers } = req.body;
+  const userId = req.user?.userId;
 
-  if (isNaN(level) || !Array.isArray(answers)) {
-    return res.status(400).json({ success: false, message: "Missing level or invalid answers structure." });
+  if (!level || !Array.isArray(answers)) {
+    return res.status(400).json({
+      success: false,
+      message: "Invalid level or answers.",
+    });
   }
 
   try {
-    const correctQuizzes = await Quiz.find({ level: level });
-    
-    // Map the incoming answers array to an object for quick lookup: { questionId: submittedAnswer }
-    const submittedAnswersMap = answers.reduce((acc, current) => {
-        // Front-end sends the Mongoose _id as 'id'
-        acc[current.id] = current.answer; 
-        return acc;
-    }, {});
-    
-    let score = 0;
-    let totalQuestions = correctQuizzes.length;
-    let isLevelComplete = false;
+    // Fetch actual quiz questions
+    const correctQuizzes = await Quiz.find({ level });
 
-    // Scoring Logic
-    correctQuizzes.forEach(quiz => {
-      // Use quiz._id (Mongoose default ID field) to look up the submitted answer
-      const submittedAnswer = submittedAnswersMap[quiz._id.toString()]; 
-      
-      if (submittedAnswer && submittedAnswer === quiz.correctAnswer) {
+    if (correctQuizzes.length === 0) {
+      return res.status(200).json({
+        success: false,
+        message: "No quiz questions exist for this level.",
+      });
+    }
+
+    // Convert submitted answers → map for faster lookup
+    const submittedMap = answers.reduce((acc, a) => {
+      acc[a.id] = a.answer?.trim().toLowerCase();
+      return acc;
+    }, {});
+
+    let score = 0;
+    const totalQuestions = correctQuizzes.length;
+
+    correctQuizzes.forEach((quiz) => {
+      const submitted = submittedMap[quiz._id.toString()];
+      const correct = quiz.correctAnswer.trim().toLowerCase();
+
+      if (submitted && submitted === correct) {
         score++;
       }
     });
 
-    const percentage = totalQuestions > 0 ? (score / totalQuestions) * 100 : 0;
+    const percentage = (score / totalQuestions) * 100;
+    const passed = percentage >= 70;
 
-    if (percentage >= 70) { 
-        isLevelComplete = true;
-        // Logic to update user's progress to the next level
-        await User.findByIdAndUpdate(userId, { $set: { currentLevel: level + 1 } });
+    // Fetch user for progress update
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found.",
+      });
+    }
+
+    // Prevent skipping levels
+    if (passed && user.currentLevel === level) {
+      await User.findByIdAndUpdate(userId, {
+        $set: { currentLevel: level + 1 },
+      });
     }
 
     return res.status(200).json({
       success: true,
-      message: isLevelComplete 
-        ? `Congratulations! Level ${level} complete. Score: ${score}/${totalQuestions}` 
+      passed,
+      score,
+      message: passed
+        ? `🎉 Level ${level} completed! Score: ${score}/${totalQuestions}`
         : `Score: ${score}/${totalQuestions}. You need 70% to pass. Try again!`,
-      score: score,
-      passed: isLevelComplete
     });
-
   } catch (error) {
-    console.error("Error submitting quiz:", error.message);
-    return res.status(500).json({ success: false, message: "Server error while submitting quiz." });
+    console.error("Error submitting quiz:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Server error while submitting quiz.",
+    });
   }
 };
