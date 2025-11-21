@@ -3,25 +3,22 @@ import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import mongoose from "mongoose";
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
 
-import quizRoutes from "./routes/quizRoutes.js";
-import User from "./models/userModel.js";
+import authRouter from "./routes/authRoutes.js";
+import quizRouter from "./routes/quizRoutes.js";
+import userRouter from "./routes/userRoutes.js";
 
 dotenv.config();
 
 const app = express();
-
 app.set("trust proxy", 1);
 
-// CORS Configuration
+// CORS
 app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "http://localhost:5174",
-      "https://treasure-hunt-xi-seven.vercel.app", // frontend URL
+      "https://treasure-hunt-xi-seven.vercel.app",
     ],
     credentials: true,
   })
@@ -29,3 +26,25 @@ app.use(
 
 app.use(express.json());
 app.use(cookieParser());
+
+// DB
+mongoose
+  .connect(process.env.MONGODB_URI)
+  .then(() => console.log("MongoDB connected"))
+  .catch((err) => {
+    console.error("MongoDB error:", err.message);
+    process.exit(1); // This is what causes Render crash!
+  });
+
+// Routes
+app.use("/api/auth", authRouter);
+app.use("/api/quiz", quizRouter);
+app.use("/api/user", userRouter);
+
+// Root
+app.get("/", (req, res) => {
+  res.send("Treasure Hunt Backend Running 🚀");
+});
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on ${PORT}`));
