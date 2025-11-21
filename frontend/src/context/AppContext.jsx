@@ -6,32 +6,32 @@ import axios from "axios";
 export const AppContext = createContext();
 
 export const AppContextProvider = (props) => {
-  // Set Axios defaults once
-  axios.defaults.withCredentials = true;
   const backendUrl =
-    import.meta.env.VITE_BACKEND_URL || "http://localhost:5000"; // Fallback for dev
+    import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
 
   const [isLoggedin, setIsLoggedin] = useState(false);
-  const [userData, setUserData] = useState(null); // Fixed: null instead of false
-  const [isLoading, setIsLoading] = useState(true); // Added: Global loading
+  const [userData, setUserData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // 🔥 FIX 1 — REMOVE axios.defaults.withCredentials
+  // Everything must pass withCredentials manually
 
   const getAuthState = async () => {
     try {
       setIsLoading(true);
-      const { data } = await axios.get(`${backendUrl}/api/auth/is-auth`);
+      const { data } = await axios.get(
+        `${backendUrl}/api/auth/is-auth`,
+        { withCredentials: true } // 🔥 FIX 2 — add this
+      );
+
       if (data.success) {
         setIsLoggedin(true);
-        getUserData();
+        await getUserData(); // fetch user info AFTER success
       } else {
         setIsLoggedin(false);
       }
     } catch (error) {
-      const errorMsg =
-        error.response?.data?.message ||
-        error.message ||
-        "Authentication check failed";
-      console.error("Auth error:", error); // Log for debugging
-      toast.error(errorMsg);
+      console.error("Auth error:", error);
       setIsLoggedin(false);
     } finally {
       setIsLoading(false);
@@ -40,35 +40,34 @@ export const AppContextProvider = (props) => {
 
   const getUserData = async () => {
     try {
-      const { data } = await axios.get(`${backendUrl}/api/user/data`);
-      if (data.success) {
-        setUserData(data.userData);
-      } else {
-        toast.error(data.message || "Failed to fetch user data");
-        setUserData(null);
-      }
+      const { data } = await axios.get(
+        `${backendUrl}/api/user/data`,
+        { withCredentials: true } // 🔥 FIX 3 — important
+      );
+
+      if (data.success) setUserData(data.userData);
+      else setUserData(null);
     } catch (error) {
-      const errorMsg =
-        error.response?.data?.message ||
-        error.message ||
-        "Failed to fetch user data";
       console.error("User data error:", error);
-      toast.error(errorMsg);
       setUserData(null);
     }
   };
 
-  // Added: Logout function
+  // 🔥 FIX 4 — also send cookie on logout
   const logout = async () => {
     try {
-      await axios.post(`${backendUrl}/api/auth/logout`);
+      await axios.post(
+        `${backendUrl}/api/auth/logout`,
+        {},
+        { withCredentials: true }
+      );
+
       setIsLoggedin(false);
       setUserData(null);
       toast.success("Logged out successfully!");
+      // eslint-disable-next-line no-unused-vars
     } catch (error) {
-      const errorMsg =
-        error.response?.data?.message || error.message || "Logout failed";
-      toast.error(errorMsg);
+      toast.error("Logout failed");
     }
   };
 

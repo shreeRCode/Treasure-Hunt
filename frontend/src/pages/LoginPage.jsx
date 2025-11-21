@@ -15,31 +15,31 @@ const LoginPage = () => {
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
-    axios.defaults.withCredentials = true;
 
     try {
       if (state === "Sign Up") {
-        const { data } = await axios.post(backendUrl + "/api/auth/register", {
-          name,
-          email,
-          password,
-        });
+        const { data } = await axios.post(
+          backendUrl + "/api/auth/register",
+          { name, email, password },
+          { withCredentials: true } // <-- FIX
+        );
 
         if (data.success) {
           setIsLoggedin(true);
-          getUserData();
+          await getUserData();
           toast.success("Successfully signed up!");
           navigate("/home");
         } else toast.error(data.message);
       } else {
-        const { data } = await axios.post(backendUrl + "/api/auth/login", {
-          email,
-          password,
-        });
+        const { data } = await axios.post(
+          backendUrl + "/api/auth/login",
+          { email, password },
+          { withCredentials: true } // <-- FIX
+        );
 
         if (data.success) {
           setIsLoggedin(true);
-          getUserData();
+          await getUserData();
           toast.success("Successfully logged in!");
           navigate("/home");
         } else toast.error(data.message);

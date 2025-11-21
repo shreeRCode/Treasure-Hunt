@@ -24,6 +24,9 @@ app.use(
   })
 );
 
+// Fix preflight CORS requests
+app.options("*", cors());
+
 app.use(express.json());
 app.use(cookieParser());
 
@@ -33,7 +36,7 @@ mongoose
   .then(() => console.log("MongoDB connected"))
   .catch((err) => {
     console.error("MongoDB error:", err.message);
-    process.exit(1); // This is what causes Render crash!
+    process.exit(1);
   });
 
 // Routes
