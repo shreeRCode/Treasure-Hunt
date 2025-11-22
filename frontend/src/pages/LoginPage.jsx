@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
 import axios from "axios";
@@ -6,12 +6,21 @@ import { toast } from "react-toastify";
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const { backendUrl, setIsLoggedin, getUserData } = useContext(AppContext);
+
+  const { backendUrl, setIsLoggedin, getUserData, isLoggedin } =
+    useContext(AppContext);
 
   const [state, setState] = useState("Sign Up"); // Sign Up / Login
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  // 🔥 AUTO-REDIRECT IF ALREADY LOGGED IN
+  useEffect(() => {
+    if (isLoggedin) {
+      navigate("/home");
+    }
+  }, [isLoggedin, navigate]);
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
@@ -21,7 +30,7 @@ const LoginPage = () => {
         const { data } = await axios.post(
           backendUrl + "/api/auth/register",
           { name, email, password },
-          { withCredentials: true } // <-- FIX
+          { withCredentials: true }
         );
 
         if (data.success) {
@@ -34,7 +43,7 @@ const LoginPage = () => {
         const { data } = await axios.post(
           backendUrl + "/api/auth/login",
           { email, password },
-          { withCredentials: true } // <-- FIX
+          { withCredentials: true }
         );
 
         if (data.success) {
