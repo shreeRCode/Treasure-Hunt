@@ -171,6 +171,7 @@ const QuizPage = () => {
           <div className="flex flex-col items-center bg-yellow-200 text-yellow-900 p-8 mt-6 mb-8 rounded-2xl shadow-xl max-w-lg">
             <div className="text-7xl animate-bounce mb-4">💰</div>
             <h2 className="text-3xl font-bold">You found the treasure!</h2>
+            <h5 className="text-3xl font-bold">Here is your offer letter!📄🏅</h5>
             <p className="text-md mt-2 mb-4 font-semibold">
               Great job completing all levels!
             </p>
