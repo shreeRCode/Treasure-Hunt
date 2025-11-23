@@ -8,10 +8,9 @@ import LandingPage from "./pages/LandingPage";
 import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
 import MapPage from "./pages/MapPage";
-import ProfilePage from "./pages/ProfilePage";
+
 import QuizPage from "./pages/QuizPage";
 import TreasurePage from "./pages/TreasurePage";
-
 
 // Context
 import { AppContext } from "./context/AppContext";
@@ -69,15 +68,6 @@ const App = () => {
           element={
             <ProtectedRoute>
               <MapPage />
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/profile"
-          element={
-            <ProtectedRoute>
-              <ProfilePage />
             </ProtectedRoute>
           }
         />
