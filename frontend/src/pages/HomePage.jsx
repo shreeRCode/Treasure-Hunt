@@ -23,12 +23,6 @@ const HomePage = () => {
           </li>
           <li
             className="cursor-pointer hover:text-yellow-900"
-            onClick={() => navigate("/profile")}
-          >
-            Profile
-          </li>
-          <li
-            className="cursor-pointer hover:text-yellow-900"
             onClick={() => navigate("/map")}
           >
             Map
