@@ -14,7 +14,6 @@ const QuizPage = () => {
   const [feedback, setFeedback] = useState(null);
   const [quizPassed, setQuizPassed] = useState(false);
 
-  // ---------------- FETCH QUESTIONS ----------------
   useEffect(() => {
     const fetchQuestions = async () => {
       setLoading(true);
@@ -50,12 +49,10 @@ const QuizPage = () => {
     fetchQuestions();
   }, [level]);
 
-  // ---------------- STORE SELECTED ANSWERS ----------------
   const handleSelect = (qid, idx) => {
     setAnswers((prev) => ({ ...prev, [qid]: idx }));
   };
 
-  // ---------------- SUBMIT ANSWERS ----------------
   const handleSubmit = async () => {
     setFeedback(null);
 
@@ -92,11 +89,9 @@ const QuizPage = () => {
     }
   };
 
-  // ---------------- AUTO-NAVIGATION FOR LEVELS 1 & 2 ----------------
   useEffect(() => {
     if (!quizPassed) return;
-
-    if (Number(level) === 3) return; // final level stops auto-navigation
+    if (Number(level) === 3) return;
 
     const timeout = setTimeout(() => {
       const nextLevel = Number(level) + 1;
@@ -106,7 +101,6 @@ const QuizPage = () => {
     return () => clearTimeout(timeout);
   }, [quizPassed, level, navigate]);
 
-  // ---------------- LOADING ----------------
   if (loading) {
     return (
       <>
@@ -118,7 +112,6 @@ const QuizPage = () => {
     );
   }
 
-  // ---------------- ERROR ON LOAD ----------------
   if (questions.length === 0 && feedback?.type === "error") {
     return (
       <>
@@ -142,7 +135,6 @@ const QuizPage = () => {
     );
   }
 
-  // ---------------- MAIN UI ----------------
   return (
     <>
       <QuizNavbar />
@@ -150,7 +142,6 @@ const QuizPage = () => {
       <div className="min-h-screen bg-gradient-to-b from-blue-200 to-purple-400 text-white flex flex-col items-center p-8">
         <h1 className="text-3xl font-bold mb-4">🧭 Level {level} Quiz</h1>
 
-        {/* Feedback */}
         {feedback && (
           <div
             className={`p-4 rounded-xl shadow-lg mb-6 w-full max-w-lg flex items-center space-x-3 ${
@@ -166,12 +157,11 @@ const QuizPage = () => {
           </div>
         )}
 
-        {/* 🎉 FINAL LEVEL — BOUNCING TREASURE ANIMATION */}
         {quizPassed && Number(level) === 3 && (
           <div className="flex flex-col items-center bg-yellow-200 text-yellow-900 p-8 mt-6 mb-8 rounded-2xl shadow-xl max-w-lg">
             <div className="text-7xl animate-bounce mb-4">💰</div>
             <h2 className="text-3xl font-bold">You found the treasure!</h2>
-            <h5 className="text-3xl font-bold">Here is your offer letter!📄🏅</h5>
+            <h5 className="text-3xl font-bold">Here's your offer letter!📄🏅</h5>
             <p className="text-md mt-2 mb-4 font-semibold">
               Great job completing all levels!
             </p>
@@ -185,12 +175,11 @@ const QuizPage = () => {
           </div>
         )}
 
-        {/* QUIZ QUESTIONS */}
         {!quizPassed && (
           <div className="bg-white/20 p-6 rounded-2xl shadow-md w-full max-w-lg">
             {questions.map((q, idx) => (
               <div key={q._id} className="mb-4">
-                <p className="font-semibold mb-2">
+                <p className="font-semibold mb-2 text-purple-900">
                   {idx + 1}. {q.question}
                 </p>
 
@@ -198,7 +187,7 @@ const QuizPage = () => {
                   <button
                     key={i}
                     onClick={() => handleSelect(q._id, i)}
-                    className={`block w-full text-left p-2 rounded-lg mb-2 transition-all ${
+                    className={`block w-full text-left p-2 rounded-lg mb-2 transition-all border border-purple-500 text-purple-900 ${
                       answers[q._id] === i
                         ? "bg-green-400/70 shadow-inner scale-[1.01]"
                         : "bg-white/20 hover:bg-white/30"
