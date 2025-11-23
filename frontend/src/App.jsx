@@ -10,7 +10,6 @@ import HomePage from "./pages/HomePage";
 import MapPage from "./pages/MapPage";
 
 import QuizPage from "./pages/QuizPage";
-import TreasurePage from "./pages/TreasurePage";
 
 // Context
 import { AppContext } from "./context/AppContext";
@@ -77,15 +76,6 @@ const App = () => {
           element={
             <ProtectedRoute>
               <QuizPage />
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/treasure"
-          element={
-            <ProtectedRoute>
-              <TreasurePage />
             </ProtectedRoute>
           }
         />
