@@ -6,7 +6,6 @@ import mongoose from "mongoose";
 
 import authRouter from "./routes/authRoutes.js";
 import quizRouter from "./routes/quizRoutes.js";
-import userRouter from "./routes/userRoutes.js";
 
 dotenv.config();
 
@@ -41,7 +40,6 @@ mongoose
 // Routes
 app.use("/api/auth", authRouter);
 app.use("/api/quiz", quizRouter);
-app.use("/api/user", userRouter);
 
 // Root
 app.get("/", (req, res) => {
