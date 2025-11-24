@@ -35,6 +35,27 @@ const quizData = [
     options: ["Indian", "Arctic", "Pacific", "Atlantic"],
     correctAnswer: "Pacific",
   },
+  // LEVEL 3 — RIDDLE QUESTIONS
+  {
+    level: 3,
+    question:
+      "I speak without a mouth and hear without ears. I have no body, but I come alive with wind. What am I?",
+    options: ["Shadow", "Echo", "Cloud", "Whistle"],
+    correctAnswer: "Echo",
+  },
+  {
+    level: 3,
+    question: "The more of this there is, the less you see. What is it?",
+    options: ["Fog", "Darkness", "Water", "Smoke"],
+    correctAnswer: "Darkness",
+  },
+  {
+    level: 3,
+    question:
+      "I have keys but no locks. I have space but no rooms. You can enter, but you can’t go outside. What am I?",
+    options: ["Keyboard", "Map", "Treasure Chest", "Secret Cave"],
+    correctAnswer: "Keyboard",
+  },
 ];
 
 async function seed() {
